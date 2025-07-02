@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.AI.Evaluation.Quality;
 using Microsoft.Extensions.AI.Evaluation.Tests.Ollama.Extensions;
 using AwesomeAssertions;
@@ -8,8 +7,6 @@ namespace Microsoft.Extensions.AI.Evaluation.Tests.Ollama;
 
 public class CompositeEvaluatorTests
 {
-    private ServiceProvider _serviceProvider;
-    private ILoggerFactory _loggerFactory;
     private ChatConfiguration? _chatConfigurationForEvaluation;
     private static string _userRequest = "What is the order ID and tracking code for my order?";
     private readonly IList<ChatMessage> s_messages = [
@@ -26,9 +23,6 @@ public class CompositeEvaluatorTests
 
     public CompositeEvaluatorTests()
     {
-        _loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-        _serviceProvider = new ServiceCollection().BuildServiceProvider();
-
         IChatClient chatClient = new OllamaChatClient(new Uri("http://localhost:11434"), "llama3");
         _chatConfigurationForEvaluation = new ChatConfiguration(chatClient);
     }
