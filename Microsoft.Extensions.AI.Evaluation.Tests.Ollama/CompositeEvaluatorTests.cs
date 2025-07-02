@@ -8,7 +8,7 @@ namespace Microsoft.Extensions.AI.Evaluation.Tests.Ollama;
 public class CompositeEvaluatorTests
 {
     private ChatConfiguration? _chatConfigurationForEvaluation;
-    private static string _userRequest = "What is the order ID and tracking code for my order?";
+    private static string _userRequest = "What is the tracking for the order 123?";
     private readonly IList<ChatMessage> s_messages = [
         new ChatMessage(
             ChatRole.System,
@@ -23,7 +23,7 @@ public class CompositeEvaluatorTests
 
     public CompositeEvaluatorTests()
     {
-        IChatClient chatClient = new OllamaChatClient(new Uri("http://localhost:11434"), "llama3");
+        IChatClient chatClient = new OllamaChatClient(new Uri("http://localhost:11434"), "llama2");
         _chatConfigurationForEvaluation = new ChatConfiguration(chatClient);
     }
 
@@ -36,7 +36,7 @@ public class CompositeEvaluatorTests
         IEvaluator groundednessEvaluator = new GroundednessEvaluator();
         IEvaluator compositeEvaluator = new CompositeEvaluator(groundednessEvaluator);
 
-        string fakeLlmResponse = "OrderId is 123, Tracking code is TKG_XYZ.";
+        string fakeLlmResponse = "OrderId is 123, Tracking code is TKG_ABC.";
         ChatMessage chatMessageResponse = new ChatMessage(ChatRole.Assistant, fakeLlmResponse);
         ChatResponse? chatResponse = new ChatResponse(chatMessageResponse);
 
@@ -44,10 +44,6 @@ public class CompositeEvaluatorTests
 
         foreach (var result in evaluationResult.Metrics)
         {
-            if (result.Value is NumericMetric numericMetric)
-            {
-                Console.WriteLine();
-            }
             if (result.Value is EvaluationMetric evaluationMetric)
             {
                 Assert.NotNull(evaluationMetric);
@@ -58,11 +54,6 @@ public class CompositeEvaluatorTests
                     EvaluationRating[] expectedRatings = [EvaluationRating.Good, EvaluationRating.Exceptional];
                     evaluationMetric.Interpretation?.Rating.Should().BeOneOf(expectedRatings, because: evaluationMetric.GenerateBecause(_userRequest, chatMessageResponse.Text));
                 }
-            }
-            else
-            {
-                Console.WriteLine();
-                //_loggerFactory.CreateLogger<AgentEvaluationTests>().LogInformation($"Metric {stringMetric.Name}: {stringMetric.Value}");
             }
         }
     }
