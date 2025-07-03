@@ -1,5 +1,5 @@
 using Microsoft.Extensions.AI.Evaluation.Quality;
-using Microsoft.Extensions.AI.Evaluation.Tests.Ollama.Extensions;
+using Microsoft.Extensions.AI.Evaluation.Tests.Shared.Extensions;
 using AwesomeAssertions;
 
 namespace Microsoft.Extensions.AI.Evaluation.Tests.Ollama;

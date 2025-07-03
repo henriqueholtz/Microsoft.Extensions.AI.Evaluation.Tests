@@ -1,11 +1,22 @@
+#pragma warning disable SKEXP0070  // AddGoogleAIGeminiChatCompletion
+#pragma warning disable SKEXP0001 // AsChatClient
+
+using AwesomeAssertions;
 using Microsoft.Extensions.AI.Evaluation.Quality;
 using Microsoft.Extensions.AI.Evaluation.Tests.Shared.Extensions;
-using AwesomeAssertions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
 
-namespace Microsoft.Extensions.AI.Evaluation.Tests.Ollama;
+namespace Microsoft.Extensions.AI.Evaluation.Tests.Gemini;
 
-public class GroundednessEvaluatorTests
+public class CompositeEvaluatorTests
 {
+    private ILoggerFactory? _loggerFactory;
+    private IServiceProvider? _serviceProvider;
+    private readonly IConfiguration _configuration;
     private ChatConfiguration? _chatConfigurationForEvaluation;
     private static string _userRequest = "What is the tracking for the order 123?";
     private readonly IList<ChatMessage> s_messages = [
@@ -20,32 +31,43 @@ public class GroundednessEvaluatorTests
     ];
 
 
-    public GroundednessEvaluatorTests()
+    public CompositeEvaluatorTests()
     {
-        IChatClient chatClient = new OllamaChatClient(new Uri("http://localhost:11434"), "llama2");
+        _configuration = new ConfigurationBuilder()
+            .AddUserSecrets<AppSettings>()
+            .Build();
+        string? geminiApiKey = _configuration["GeminiApiKey"];
+        _serviceProvider = new ServiceCollection()
+            .AddLogging(builder => builder.AddConsole())
+            .AddGoogleAIGeminiChatCompletion(Gemini.MODEL_ID, geminiApiKey)
+            .BuildServiceProvider();
+
+        IChatCompletionService chatCompletionService = _serviceProvider.GetRequiredService<IChatCompletionService>();
+        IChatClient chatClient = chatCompletionService.AsChatClient();
         _chatConfigurationForEvaluation = new ChatConfiguration(chatClient);
     }
 
     [Fact]
-    public async Task GroundednessEvaluatorTest()
+    public async Task CompositeEvaluatorWithGroundednessEvaluatorTest()
     {
         string groundTruth = "OrderId is 123, Tracking code is TKG_ABC.";
         GroundednessEvaluatorContext groundingContextForGroundednessEvaluator = new GroundednessEvaluatorContext(groundTruth);
 
         IEvaluator groundednessEvaluator = new GroundednessEvaluator();
+        IEvaluator compositeEvaluator = new CompositeEvaluator(groundednessEvaluator);
 
         string fakeLlmResponse = "OrderId is 123, Tracking code is TKG_ABC.";
         ChatMessage chatMessageResponse = new ChatMessage(ChatRole.Assistant, fakeLlmResponse);
         ChatResponse? chatResponse = new ChatResponse(chatMessageResponse);
 
-        EvaluationResult evaluationResult = await groundednessEvaluator.EvaluateAsync(s_messages, chatResponse, _chatConfigurationForEvaluation, [groundingContextForGroundednessEvaluator]);
+        EvaluationResult evaluationResult = await compositeEvaluator.EvaluateAsync(s_messages, chatResponse, _chatConfigurationForEvaluation, [groundingContextForGroundednessEvaluator]);
 
         foreach (var result in evaluationResult.Metrics)
         {
             if (result.Value is EvaluationMetric evaluationMetric)
             {
                 Assert.NotNull(evaluationMetric);
-                if (evaluationMetric.Name == GroundednessEvaluator.GroundednessMetricName)
+                if (evaluationMetric.Name == GroundednessEvaluator.GroundednessMetricName || evaluationMetric.Name == EquivalenceEvaluator.EquivalenceMetricName)
                 {
                     Assert.False(evaluationMetric.Interpretation?.Failed, evaluationMetric.GenerateBecause(_userRequest, chatMessageResponse.Text));
 

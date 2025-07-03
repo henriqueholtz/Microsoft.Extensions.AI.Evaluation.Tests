@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <UserSecretsId>cbf47b7d-604f-4c16-96e6-4b4f5f2895be</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,8 +14,13 @@
     <PackageReference Include="Microsoft.Extensions.AI" Version="9.6.0" />
     <PackageReference Include="Microsoft.Extensions.AI.Evaluation" Version="9.6.0" />
     <PackageReference Include="Microsoft.Extensions.AI.Evaluation.Quality" Version="9.6.0" />
-    <PackageReference Include="Microsoft.Extensions.AI.Ollama" Version="9.6.0-preview.1.25310.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.6" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.Google" Version="1.59.0-alpha" />
     <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
   </ItemGroup>

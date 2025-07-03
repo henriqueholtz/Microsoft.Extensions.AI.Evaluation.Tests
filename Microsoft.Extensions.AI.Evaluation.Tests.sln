@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Extensions.AI.Evaluation.Tests.Ollama", "Microsoft.Extensions.AI.Evaluation.Tests.Ollama\Microsoft.Extensions.AI.Evaluation.Tests.Ollama.csproj", "{D2B84CDE-DB61-4129-A3FA-18CC8F9161EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Extensions.AI.Evaluation.Tests.Gemini", "Microsoft.Extensions.AI.Evaluation.Tests.Gemini\Microsoft.Extensions.AI.Evaluation.Tests.Gemini.csproj", "{4A275457-A001-495D-A076-30641E9B4682}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Extensions.AI.Evaluation.Tests.Shared", "Microsoft.Extensions.AI.Evaluation.Tests.Shared\Microsoft.Extensions.AI.Evaluation.Tests.Shared.csproj", "{7198881A-1713-462E-93B7-B17986AD468A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{D2B84CDE-DB61-4129-A3FA-18CC8F9161EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2B84CDE-DB61-4129-A3FA-18CC8F9161EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2B84CDE-DB61-4129-A3FA-18CC8F9161EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A275457-A001-495D-A076-30641E9B4682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A275457-A001-495D-A076-30641E9B4682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A275457-A001-495D-A076-30641E9B4682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A275457-A001-495D-A076-30641E9B4682}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7198881A-1713-462E-93B7-B17986AD468A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7198881A-1713-462E-93B7-B17986AD468A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7198881A-1713-462E-93B7-B17986AD468A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7198881A-1713-462E-93B7-B17986AD468A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

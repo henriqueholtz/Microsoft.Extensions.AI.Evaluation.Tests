@@ -1,4 +1,4 @@
-namespace Microsoft.Extensions.AI.Evaluation.Tests.Ollama.Extensions;
+namespace Microsoft.Extensions.AI.Evaluation.Tests.Shared.Extensions;
 
 public static class EvaluationMetricExtensions
 {
